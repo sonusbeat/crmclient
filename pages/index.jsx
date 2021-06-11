@@ -4,7 +4,7 @@ const Index = () => {
   return (
     <>
       <Layout>
-        <p>This content is children from index</p>
+        <h1 className="text-2xl text-gray-800 font-light">Clients</h1>
       </Layout>
     </>
   )
