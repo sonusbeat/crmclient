@@ -6,15 +6,22 @@ const NewAccount = () => {
 
   const inputStyles = "shadow-md appereance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline";
   const labelStyles = "block text-gray-700 text-sm font-bold mb-2";
+  const errorStyles = "my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4";
 
   // Form Validation
   const formik = useFormik({
     initialValues: {
-      first_name: "John",
-      last_name: "Doe",
-      email: "johndoe@nowhere.com",
-      password: "0123456789",
+      first_name: "",
+      last_name: "",
+      email: "",
+      password: "",
     },
+    validationSchema: Yup.object({
+      first_name: Yup.string().required("First Name is required!"),
+      last_name: Yup.string().required("Last Name is required!"),
+      email: Yup.string().email("Email is not valid").required("Email is required!"),
+      password: Yup.string().required("Password is required!").min(6, "Password should be at least 6 characters!"),
+    }),
     onSubmit: values => {
       console.log("Sending ...");
       console.log(values);
@@ -47,8 +54,18 @@ const NewAccount = () => {
                 autoComplete="off"
                 value={ formik.values.first_name }
                 onChange={ formik.handleChange }
+                onBlur={ formik.handleBlur }
               />
             </div>
+
+            {
+              formik.touched.first_name && formik.errors.first_name && (
+                <div className={ errorStyles }>
+                  <p className="font-bold">Error</p>
+                  <p>{ formik.errors.first_name }</p>
+                </div>
+              )
+            }
 
             <div className="mb-4">
               <label
@@ -67,6 +84,15 @@ const NewAccount = () => {
               />
             </div>
 
+            {
+              formik.touched.last_name && formik.errors.last_name && (
+                <div className={ errorStyles }>
+                  <p className="font-bold">Error</p>
+                  <p>{ formik.errors.last_name }</p>
+                </div>
+              )
+            }
+
             <div className="mb-4">
               <label
                 htmlFor="email"
@@ -84,6 +110,15 @@ const NewAccount = () => {
               />
             </div>
 
+            {
+              formik.touched.email && formik.errors.email && (
+                <div className={ errorStyles }>
+                  <p className="font-bold">Error</p>
+                  <p>{ formik.errors.email }</p>
+                </div>
+              )
+            }
+
             <div className="mb-4">
               <label
                 htmlFor="password"
@@ -99,6 +134,15 @@ const NewAccount = () => {
                 onChange={ formik.handleChange }
               />
             </div>
+
+            {
+              formik.touched.password && formik.errors.password && (
+                <div className={ errorStyles }>
+                  <p className="font-bold">Error</p>
+                  <p>{ formik.errors.password }</p>
+                </div>
+              )
+            }
 
             <div className="mt-9">
               <button
