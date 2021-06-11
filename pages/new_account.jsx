@@ -1,8 +1,23 @@
 import Layout from "../components/Layout";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useMutation, gql } from "@apollo/client";
+
+const NEW_ACCOUNT = gql`
+  mutation newUser($input: UserInput) {
+    newUser(input: $input) {
+      id
+      first_name
+      last_name
+      email
+    }
+  }
+`;
 
 const NewAccount = () => {
+
+  // Mutation
+  const [ newUser ] = useMutation( NEW_ACCOUNT );
 
   const inputStyles = "shadow-md appereance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline";
   const labelStyles = "block text-gray-700 text-sm font-bold mb-2";
@@ -22,13 +37,33 @@ const NewAccount = () => {
       email: Yup.string().email("Email is not valid").required("Email is required!"),
       password: Yup.string().required("Password is required!").min(6, "Password should be at least 6 characters!"),
     }),
-    onSubmit: values => {
-      console.log("Sending ...");
-      console.log(values);
+    onSubmit: async ( values ) => {
+      const { first_name, last_name, email, password } = values;
+
+      try {
+
+        const data = await newUser({
+          variables: {
+            input: {
+              first_name,
+              last_name,
+              email,
+              password
+            }
+          }
+        });
+
+        console.log(data);
+
+        // Create Message, "User created successfully"
+
+        // Redirect user to clients
+
+      } catch (error) {
+        console.log(error);
+      }
     }
   });
-
-
 
   return (
     <Layout>
