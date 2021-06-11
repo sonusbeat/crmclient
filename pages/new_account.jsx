@@ -1,9 +1,27 @@
 import Layout from "../components/Layout";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const NewAccount = () => {
 
   const inputStyles = "shadow-md appereance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline";
   const labelStyles = "block text-gray-700 text-sm font-bold mb-2";
+
+  // Form Validation
+  const formik = useFormik({
+    initialValues: {
+      first_name: "John",
+      last_name: "Doe",
+      email: "johndoe@nowhere.com",
+      password: "0123456789",
+    },
+    onSubmit: values => {
+      console.log("Sending ...");
+      console.log(values);
+    }
+  });
+
+
 
   return (
     <Layout>
@@ -13,6 +31,7 @@ const NewAccount = () => {
         <div className="w-full max-w-sm">
           <form
             className="bg-white rounded shadow-md px-8 pt-6 pb-8 mb-4"
+            onSubmit={ formik.handleSubmit }
           >
             <div className="mb-4">
               <label
@@ -26,6 +45,8 @@ const NewAccount = () => {
                 name="first_name"
                 type="text"
                 autoComplete="off"
+                value={ formik.values.first_name }
+                onChange={ formik.handleChange }
               />
             </div>
 
@@ -41,6 +62,8 @@ const NewAccount = () => {
                 name="last_name"
                 type="text"
                 autoComplete="off"
+                value={ formik.values.last_name }
+                onChange={ formik.handleChange }
               />
             </div>
 
@@ -56,6 +79,8 @@ const NewAccount = () => {
                 name="email"
                 type="email"
                 autoComplete="off"
+                value={ formik.values.email }
+                onChange={ formik.handleChange }
               />
             </div>
 
@@ -70,6 +95,8 @@ const NewAccount = () => {
                 id="password"
                 name="password"
                 type="password"
+                value={ formik.values.password }
+                onChange={ formik.handleChange }
               />
             </div>
 
