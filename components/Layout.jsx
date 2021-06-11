@@ -1,4 +1,4 @@
-import Head from "next/head";
+  import Head from "next/head";
 import Sidebar from "../components/Sidebar";
 
 const Layout = ({ children }) => {
@@ -19,9 +19,13 @@ const Layout = ({ children }) => {
         />
       </Head>
 
-      <Sidebar />
+      <div className="bg-gray-200 min-h-screen">
+        <div className="flex min-h-screen">
+          <Sidebar />
+        </div>
 
-      {children}
+        {children}
+      </div>
     </>
   );
 };
