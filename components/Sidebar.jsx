@@ -13,13 +13,13 @@ const Sidebar = () => {
         <p className="text-white text-2xl font-black">CRM Clients</p>
       </div>
       <nav className="mt-5 list-none text-white">
-        <li className={ router.pathname === "/" && activeLink }>
+        <li className={ router.pathname === "/" ? activeLink : null }>
           <Link href="/"><a className="p-3 block">Clients</a></Link>
         </li>
-        <li className={ router.pathname === "/orders" && activeLink }>
+        <li className={ router.pathname === "/orders" ? activeLink : null }>
           <Link href="/orders"><a className="p-3 block">Orders</a></Link>
         </li>
-        <li className={ router.pathname === "/products" && activeLink }>
+        <li className={ router.pathname === "/products" ? activeLink : null }>
           <Link href="/products"><a className="p-3 block">Products</a></Link>
         </li>
       </nav>

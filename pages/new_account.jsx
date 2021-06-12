@@ -68,9 +68,6 @@ const NewAccount = () => {
         // Create Message, "User created successfully"
         setMessage( `User "${ data.newUser.first_name  } ${ data.newUser.last_name }" created successfully!` );
 
-        // Set default form error
-        setFormError(false);
-
         setTimeout(() => {
           // Redirect to login
           router.push("/login");
@@ -82,6 +79,9 @@ const NewAccount = () => {
         setFormError(true);
 
         setTimeout( () => {
+          // Set default form error
+          setFormError(false);
+
           // Clear Messages
           setMessage( null );
         }, 3000 );
