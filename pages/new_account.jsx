@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useMutation, gql } from "@apollo/client";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useRouter } from "next/router";
+
 import Layout from "../components/Layout";
 
 const NEW_ACCOUNT = gql`
@@ -19,9 +21,13 @@ const NewAccount = () => {
 
   // Message State
   const [message, setMessage] = useState(null);
+  const [formError, setFormError] = useState(false);
 
   // Mutation
   const [ newUser ] = useMutation( NEW_ACCOUNT );
+
+  // Routing
+  const router = useRouter();
 
   const inputStyles = "shadow-md appereance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline";
   const labelStyles = "block text-gray-700 text-sm font-bold mb-2";
@@ -46,7 +52,7 @@ const NewAccount = () => {
 
       try {
 
-        const data = await newUser({
+        const { data } = await newUser({
           variables: {
             input: {
               first_name,
@@ -57,25 +63,39 @@ const NewAccount = () => {
           }
         });
 
-        console.log(data);
-
         // Create Message, "User created successfully"
+        setMessage( `User "${ data.newUser.first_name  } ${ data.newUser.last_name }" created successfully!` );
 
-        // Redirect user to clients
+        // Set default form error
+        setFormError(false);
 
+        setTimeout(() => {
+          // Redirect to login
+          router.push("/login");
+        }, 3000);
+          
       } catch ( error ) {
         
         setMessage( error.message.replace( "GraphQL error: ", "" ) );
+        setFormError(true);
 
-        setTimeout( () => setMessage( null ), 3000 );
+        setTimeout( () => {
+          // Clear Messages
+          setMessage( null );
+        }, 3000 );
 
       }
     }
   });
 
   const showMessage = () => {
+    let messageStyles = "bg-";
+
+    messageStyles += formError ? "red-500 " : "green-500 ";
+    messageStyles += "py-2 px-3 w-full my-3";
+
     return (
-      <div className="bg-red-500 py-2 px-3 w-full my-3">
+      <div className={ messageStyles }>
         <p className="text-center font-bold text-white">{ message }</p>
       </div>
     );
