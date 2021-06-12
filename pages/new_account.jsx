@@ -41,12 +41,14 @@ const NewAccount = () => {
       email: "",
       password: "",
     },
+
     validationSchema: Yup.object({
       first_name: Yup.string().required("First Name is required!"),
       last_name: Yup.string().required("Last Name is required!"),
       email: Yup.string().email("Email is not valid").required("Email is required!"),
       password: Yup.string().required("Password is required!").min(6, "Password should be at least 6 characters!"),
     }),
+
     onSubmit: async ( values ) => {
       const { first_name, last_name, email, password } = values;
 
@@ -73,9 +75,9 @@ const NewAccount = () => {
           // Redirect to login
           router.push("/login");
         }, 3000);
-          
+
       } catch ( error ) {
-        
+
         setMessage( error.message.replace( "GraphQL error: ", "" ) );
         setFormError(true);
 
