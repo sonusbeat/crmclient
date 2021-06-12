@@ -1,7 +1,8 @@
-import Layout from "../components/Layout";
+import { useState } from "react";
+import { useMutation, gql } from "@apollo/client";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useMutation, gql } from "@apollo/client";
+import Layout from "../components/Layout";
 
 const NEW_ACCOUNT = gql`
   mutation newUser($input: UserInput) {
@@ -16,6 +17,9 @@ const NEW_ACCOUNT = gql`
 
 const NewAccount = () => {
 
+  // Message State
+  const [message, setMessage] = useState(null);
+
   // Mutation
   const [ newUser ] = useMutation( NEW_ACCOUNT );
 
@@ -23,7 +27,7 @@ const NewAccount = () => {
   const labelStyles = "block text-gray-700 text-sm font-bold mb-2";
   const errorStyles = "my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4";
 
-  // Form Validation
+  // Form Validation and Submit
   const formik = useFormik({
     initialValues: {
       first_name: "",
@@ -59,18 +63,34 @@ const NewAccount = () => {
 
         // Redirect user to clients
 
-      } catch (error) {
-        console.log(error);
+      } catch ( error ) {
+        
+        setMessage( error.message.replace( "GraphQL error: ", "" ) );
+
+        setTimeout( () => setMessage( null ), 3000 );
+
       }
     }
   });
 
+  const showMessage = () => {
+    return (
+      <div className="bg-red-500 py-2 px-3 w-full my-3">
+        <p className="text-center font-bold text-white">{ message }</p>
+      </div>
+    );
+  };
+
   return (
     <Layout>
+
       <h1 className="text-center text-white text-2xl font-light">New Account</h1>
 
       <div className="flex justify-center mt-5">
         <div className="w-full max-w-sm">
+
+          { message && showMessage() }
+
           <form
             className="bg-white rounded shadow-md px-8 pt-6 pb-8 mb-4"
             onSubmit={ formik.handleSubmit }
